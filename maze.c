@@ -12,6 +12,7 @@ int main() {
 	int i, j;
 	int starting_x, starting_y;
 	int x_dim, y_dim;
+	char value;
 	
 	fscanf(maze, "(%i, %i)", &starting_x, &starting_y);
 	fscanf(maze, "%i %i", &x_dim, &y_dim);
@@ -19,8 +20,6 @@ int main() {
 	printf("(%i, %i)\n%i %i", starting_x, starting_y, x_dim, y_dim);
 	
 	char actual_maze[(x_dim) * (y_dim)];
-//	char* actual_maze;
-//	printf("%i %i\n", x_dim, y_dim);
 	char *point_maze[(x_dim) * (y_dim)];
 	point_maze[(x_dim) * (y_dim)] = &actual_maze[(x_dim) * (y_dim)];
 	*point_maze = (char*) malloc (((x_dim) * (y_dim)) * sizeof(char));
@@ -30,15 +29,24 @@ int main() {
 	
 	printf("\nmaze = %i, char = %i", sizeof(actual_maze), sizeof(char));
 	
-//	char actual_maze[0][0];
-//	
-//	for (i = 0; i < x_dim; i++) {
-//		for (j = 0; j < y_dim; j++) {
-//			actual_maze = (char*) malloc (y_dim * sizeof(char));
-//		}
-//		actual_maze = (char*) malloc (x_dim * sizeof(char));
-//	}
+	
+	/// Trying to scan maze into point_maze ///
+		
+	for (i = 0; i < x_dim; i++) {
+		for (j = 0; j < y_dim; j++) {
+			fscanf(maze, "%s\t", &value);
+			point_maze[i][j] = value;
+		}
+	}
 
+	/// Trying to print maze into console ///
+	
+	for (i = 0; i < x_dim; i++) {
+		for (j = 0; j < y_dim; j++) {
+			printf("%s	", point_maze[i][j]);
+		}
+		printf("\n");
+	}
 
   return 0;
 }
