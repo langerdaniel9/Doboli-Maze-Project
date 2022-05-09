@@ -1,6 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+
+
+
+
 int main() {
 	FILE *maze; 
 	
@@ -9,6 +14,8 @@ int main() {
 		exit(1);
 	} 
 
+
+/*
 	int i, j;
 	int starting_x, starting_y;
 	int x_dim, y_dim;
@@ -48,5 +55,7 @@ int main() {
 		printf("\n");
 	}
 
+
+*/
   return 0;
 }
