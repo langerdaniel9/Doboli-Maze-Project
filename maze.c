@@ -15,6 +15,30 @@ typedef struct deed
 	coord location;
 	int value;
 } deed;
+
+char test_maze[10][10] = {
+{'*', ' ', '*', '*', '*', '*', '*', '*', '*', '*'},
+{'*', ' ', '*', '*', '*', '*', '*', '*', '*', '*'},
+{'*', ' ', '*', '*', '*', '*', '*', '*', '*', '*'},
+{'*', ' ', '*', '*', '*', '*', '*', '*', '*', '*'},
+{'*', ' ', '*', '*', '*', '*', '*', '*', '*', '*'},
+{'*', ' ', '*', '*', '*', '*', '*', '*', '*', '*'},
+{'*', ' ', '*', '*', '*', '*', '*', '*', '*', '*'},
+{'*', ' ', '*', '*', '*', '*', '*', '*', '*', '*'},
+{'*', ' ', '*', '*', '*', '*', '*', '*', '*', '*'},
+{'*', ' ', '*', '*', '*', '*', '*', '*', '*', '*'}};
+
+char pher_maze[10][10] = {
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 //--------------------------------
 
 // 17 main functions
@@ -39,20 +63,44 @@ void MOVE_R()
 {
 }
 
-void CWL()
-{
+int CWL(int x, int y) {
+	if (test_maze[x][y - 1] == ' ' && pher_maze[x][y - 1] == 0) {
+		printf("I feel an itch to the LEFT\n");
+		return 1;
+	} else {
+		printf("I feel NO ITCH\n");
+		return 0;
+	}	
 }
 
-void CWR()
-{
+int CWR(int x, int y) {
+	if (test_maze[x][y + 1] == ' ' && pher_maze[x][y + 1] == 0) {
+		printf("I feel an itch to the RIGHT\n");
+		return 1;
+	} else {
+		printf("I feel NO ITCH\n");
+		return 0;
+	}
 }
 
-void CWF()
-{
+int CWF(int x, int y) {
+	if (test_maze[x + 1][y] == ' ' && pher_maze[x + 1][y] == 0) {
+		printf("I feel an itch FORWARD\n");
+		return 1;
+	} else {
+		printf("I feel NO ITCH\n");
+		return 0;
+	}
 }
 
-void CWB()
-{
+int CWB(int x, int y) {
+	if (test_maze[x - 1][y - 1] == ' ' && pher_maze[x - 1][y] == 0) {
+		printf("I feel an itch BACKWARDS\n");
+		return 1;
+	} else {
+		printf("I feel NO ITCH\n");
+		return 0;
+	}
 }
 
 void PUSH()
@@ -92,8 +140,58 @@ void RP(int n, int t)
 
 //--------------------------------
 
+
 int main()
 {
+	int i, j; 
+	for (i = 0; i < 10; i++) {
+		for (j = 0; j < 10; j++) {
+			printf("%c", test_maze[i][j]);
+		}
+		printf("\n");
+	}
+
+	printf("\n");
+	
+	for (i = 0; i < 10; i++) {
+		for (j = 0; j < 10; j++) {
+			printf("%i", pher_maze[i][j]);
+		}
+		printf("\n");
+	}
+	
+	printf("\n");
+	
+	coord currentPos;
+	currentPos.x = 0;
+	currentPos.y = 1;
+	
+	if (test_maze[currentPos.x][currentPos.y] != ' ') {
+		printf("You're in a wall, buddy!\n");
+		return 1;
+	} else {
+		printf("You're good! Here's your starting position: (%i, %i)\n", currentPos.x, currentPos.y);
+	}
+	
+	CWL(currentPos.x, currentPos.y);
+	CWR(currentPos.x, currentPos.y);
+	CWF(currentPos.x, currentPos.y);
+	CWB(currentPos.x, currentPos.y);
+
+/*	
+	if (CWL(currentPos.x, currentPos.y) == 1) {
+		printf("I feel an itch to the LEFT");
+	} else if (CWR(currentPos.x, currentPos.y) == 1) {
+		printf("I feel an itch to the RIGHT");
+	} else if (CWF(currentPos.x, currentPos.y) == 1) {
+		printf("I feel an itch FORWARD");
+	} else if (CWB(currentPos.x, currentPos.y) == 1) {
+		printf("I feel an itch BACKWARDS");
+	}
+*/
+	
+	/*
+	
 	// open input file
 	FILE *input;
 
@@ -186,5 +284,7 @@ int main()
 		printf("\n");
 	}
 
+	*/
+	
 	return 0;
 }
