@@ -104,11 +104,11 @@ int main()
 	}
 
 	int i, j;
-	int starting_x, starting_y;
 	int x_dim, y_dim;
+	coord currentPos;
 
 	// get starting position and maze dimensions from input file
-	fscanf(input, "(%i, %i)", &starting_x, &starting_y);
+	fscanf(input, "(%i, %i)", &currentPos.x, &currentPos.y);
 	fscanf(input, "%i %i", &x_dim, &y_dim);
 	// printf("(%i, %i)\n%i %i\n", starting_x, starting_y, x_dim, y_dim);
 
