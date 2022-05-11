@@ -10,6 +10,8 @@ typedef struct coord
 	int y;
 } coord;
 
+coord currentPos;
+
 typedef struct deed
 {
 	coord location;
