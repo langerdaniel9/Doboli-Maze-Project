@@ -41,6 +41,8 @@ char pher_maze[10][10] = {
 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+
+
 //--------------------------------
 
 // 17 main functions
@@ -228,10 +230,12 @@ int main()
 	}
 
 	// creating pheremone array (initally all values into 0)	
+
 	int *pherArray = (int *)malloc(((x_dim) * (y_dim)) * sizeof(int *));
 	for (i = 0; i < (x_dim * y_dim); i++) {
 		pherArray[i] = 0;
 	}
+
 
 	// some unintended behavior observed, so just reopen text file and read first two lines to start at the beginning of the maze
 	fclose(input);
