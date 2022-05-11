@@ -43,8 +43,8 @@ char pher_maze[10][10] = {
 
 // 17 main functions
 // Change and fill in as needed, will move to stack.h/stack.c file later
-int MARK(int x, int y) {
-//	pherArray[x][y] = 1;
+void MARK() {
+	pherArray[currentPos.x][currentPos.y] = 1;
 }
 
 void MOVE_F()
@@ -63,8 +63,8 @@ void MOVE_R()
 {
 }
 
-int CWL(int x, int y) {
-	if (test_maze[x][y - 1] == ' ' && pher_maze[x][y - 1] == 0) {
+void CWL() {
+	if ((currentPos.y - 1) == ' ' && pher_maze[x][y - 1] == 0) {
 		printf("I feel an itch to the LEFT\n");
 		return 1;
 	} else {
@@ -73,8 +73,8 @@ int CWL(int x, int y) {
 	}	
 }
 
-int CWR(int x, int y) {
-	if (test_maze[x][y + 1] == ' ' && pher_maze[x][y + 1] == 0) {
+void CWR() {
+	if ((currentPos.y + 1) == ' ' && pher_maze[x][y + 1] == 0) {
 		printf("I feel an itch to the RIGHT\n");
 		return 1;
 	} else {
@@ -83,8 +83,8 @@ int CWR(int x, int y) {
 	}
 }
 
-int CWF(int x, int y) {
-	if (test_maze[x + 1][y] == ' ' && pher_maze[x + 1][y] == 0) {
+void CWF() {
+	if ((currentPos.x + 1) == ' ' && pher_maze[x + 1][y] == 0) {
 		printf("I feel an itch FORWARD\n");
 		return 1;
 	} else {
@@ -93,8 +93,8 @@ int CWF(int x, int y) {
 	}
 }
 
-int CWB(int x, int y) {
-	if (test_maze[x - 1][y - 1] == ' ' && pher_maze[x - 1][y] == 0) {
+void CWB() {
+	if ((currentPos.x - 1) == ' ' && pher_maze[x - 1][y] == 0) {
 		printf("I feel an itch BACKWARDS\n");
 		return 1;
 	} else {
