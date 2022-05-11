@@ -30,7 +30,7 @@ char test_maze[10][10] = {
 
 char pher_maze[10][10] = {
 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-{0, 1, 0, 0, 0, 0, 0, 0, 0, 0},
+{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -43,8 +43,8 @@ char pher_maze[10][10] = {
 
 // 17 main functions
 // Change and fill in as needed, will move to stack.h/stack.c file later
-void MARK()
-{
+int MARK(int x, int y) {
+//	pherArray[x][y] = 1;
 }
 
 void MOVE_F()
@@ -143,6 +143,7 @@ void RP(int n, int t)
 
 int main()
 {
+	/*
 	int i, j; 
 	for (i = 0; i < 10; i++) {
 		for (j = 0; j < 10; j++) {
@@ -161,11 +162,13 @@ int main()
 	}
 	
 	printf("\n");
+	*/
 	
-	coord currentPos;
-	currentPos.x = 0;
-	currentPos.y = 1;
-	
+//	coord currentPos;
+//	currentPos.x = 0;
+//	currentPos.y = 1;
+
+/*	
 	if (test_maze[currentPos.x][currentPos.y] != ' ') {
 		printf("You're in a wall, buddy!\n");
 		return 1;
@@ -178,6 +181,7 @@ int main()
 	CWF(currentPos.x, currentPos.y);
 	CWB(currentPos.x, currentPos.y);
 
+*/
 /*	
 	if (CWL(currentPos.x, currentPos.y) == 1) {
 		printf("I feel an itch to the LEFT");
@@ -190,7 +194,7 @@ int main()
 	}
 */
 	
-/*
+
 	
 	// open input file
 	FILE *input;
@@ -219,6 +223,12 @@ int main()
 	for (i = 0; i < (x_dim * y_dim); i++)
 	{
 		deedArray[i] = 0;
+	}
+
+	// creating pheremone array (initally all values into 0)	
+	int *pherArray = (int *)malloc(((x_dim) * (y_dim)) * sizeof(int *));
+	for (i = 0; i < (x_dim * y_dim); i++) {
+		pherArray[i] = 0;
 	}
 
 	// some unintended behavior observed, so just reopen text file and read first two lines to start at the beginning of the maze
@@ -283,8 +293,17 @@ int main()
 		}
 		printf("\n");
 	}
-
-*/
+	printf("\n\n");
+		
+	// print pheremone array
+	for (i = 0; i < x_dim; i++) {
+		for (j = 0; j < y_dim; j++) {
+			pherArray[(i * x_dim) + j] = 0;
+			printf("%i ", pherArray[(i * x_dim) + j]);
+		}
+		printf("\n");
+	}	
 	
 	return 0;
+
 }
