@@ -145,11 +145,68 @@ void BACKTRACK()
 	steps++;
 }
 
-// void BJPI(){}
+void BJPI() {
+	if (CWL() == 1) {
+		// i represents the number of spaces jumped over, or the number of consecutive CW functions used
+		int i = 1;					
+		while (mazeArray[(currentPos.x + (currentPos.y * x_dim)) - i] == ' ' && pheromoneArray[(currentPos.x + (currentPos.y * x_dim)) - i] == 0) {
+		// also in a jump, do we MARK all of the spaces the ant jumps over?
+			MARK();
+			currentPos.y -= 1;
+			checkIfOnDeed();
+			i++;
+		} 
+		// in a jump, would that only take one step in the stack memory?
+		steps++;		
+		
+	} else if (CWR() == 1) {
+		int i = 1;
+		while (mazeArray[(currentPos.x + (currentPos.y * x_dim)) + i] == ' ' && pheromoneArray[(currentPos.x + (currentPos.y * x_dim)) + i] == 0) {
+			MARK();
+			currentPos.y += 1;
+			checkIfOnDeed();
+			i++;
+		} 
+		steps++;
+		
+	} else if (CWF() == 1) {
+		int i = 1;
+		while (mazeArray[(currentPos.x + (currentPos.y * x_dim)) - (x_dim * i)] == ' ' && pheromoneArray[(currentPos.x + (currentPos.y * x_dim)) - (x_dim * i)] == 0) {
+			MARK();
+			currentPos.x += 1;
+			checkIfOnDeed();
+			i++;
+		} 
+		steps++;
+		
+	} else if (CWB() == 1) {
+		int i = 1;
+		while (mazeArray[(currentPos.x + (currentPos.y * x_dim)) + (x_dim * i)] == ' ' && pheromoneArray[(currentPos.x + (currentPos.y * x_dim)) + (x_dim * i)] == 0) {
+			MARK();
+			currentPos.x -= 1;
+			checkIfOnDeed();
+			i++;
+		} 
+		steps++;
+		
+	}
+}
 
-// void CJPI(){}
+void CJPI() {
+	if (CWL() == 1) {
+		MOVE_L;	
+	} else if (CWR() == 1) {
+		MOVE_R;
+	} else if (CWF() == 1) {
+		MOVE_F;
+	} else if (CWB() == 1) {
+		MOVE_B;
+	}
+}
 
-// void RP(int n, int t){}
+void RP(int n, int t) {
+
+}
 
 //--------------------------------
 // Other functions, will move to functions.h/functions.c file later
