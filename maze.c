@@ -141,6 +141,10 @@ int CWB() // check down
 
 void PUSH()
 {
+	if (stackPosition == MAX_SIZE)
+	{
+		CLEAR();
+	}
 	int i;
 	stack[stackPosition] = currentPos;
 	stackPosition++;
@@ -177,9 +181,9 @@ coord PEEK()
 
 void CLEAR()
 {
-	// Remove all but one stored location
-	// Need to keep at least one because otherwise execution will just end since there are no possible moves
-	stackPosition = 1;
+	// Remove all but stored locations
+	// Need to keep at least one because otherwise execution will just end since there are no possible moves, ie. only call when adding the max_size+1th location
+	stackPosition = 0;
 	int i;
 	fprintf(output, "CLEAR\t\tCleared stack\n");
 	fprintf(output, "Stack is now: ");
