@@ -93,6 +93,7 @@ void MOVE_R()
 
 int CWL() // check left
 {
+	fprintf(output, "CWL ()\n");
 	if (mazeArray[(currentPos.x + (currentPos.y * x_dim)) - 1] == ' ' && pheromoneArray[(currentPos.x + (currentPos.y * x_dim)) - 1] == 0)
 	{
 		fprintf(output, "CWL\t\tLeft of (%i, %i) is empty\n", currentPos.x, currentPos.y);
@@ -104,6 +105,7 @@ int CWL() // check left
 
 int CWR() // check right
 {
+	fprintf(output, "CWR ()\n");
 	if (mazeArray[(currentPos.x + (currentPos.y * x_dim)) + 1] == ' ' && pheromoneArray[(currentPos.x + (currentPos.y * x_dim)) + 1] == 0)
 	{
 		fprintf(output, "CWR\t\tRight of (%i, %i) is empty\n", currentPos.x, currentPos.y);
@@ -115,6 +117,7 @@ int CWR() // check right
 
 int CWF() // check up
 {
+	fprintf(output, "CWF ()\n");
 	if (mazeArray[(currentPos.x + (currentPos.y * x_dim)) - x_dim] == ' ' && pheromoneArray[(currentPos.x + (currentPos.y * x_dim)) - x_dim] == 0)
 	{
 		fprintf(output, "CWF\t\tUp of (%i, %i) is empty\n", currentPos.x, currentPos.y);
@@ -126,6 +129,7 @@ int CWF() // check up
 
 int CWB() // check down
 {
+	fprintf(output, "CWB ()\n");
 	if (mazeArray[(currentPos.x + (currentPos.y * x_dim)) + x_dim] == ' ' && pheromoneArray[(currentPos.x + (currentPos.y * x_dim)) + x_dim] == 0)
 	{
 		fprintf(output, "CWB\t\tDown of (%i, %i) is empty\n", currentPos.x, currentPos.y);
@@ -206,11 +210,87 @@ void BACKTRACK()
 	fprintf(output, "BACKTRACK\tMoving back to peeked position (%i, %i) | Step Count = %i\n", currentPos.x, currentPos.y, steps);
 }
 
-// void BJPI(){}
+void BJPI()
+{
+	if (CWL() == 1)
+	{
+		// i represents the number of spaces jumped over, or the number of consecutive CW functions used
+		int i = 1;
+		while (mazeArray[(currentPos.x + (currentPos.y * x_dim)) - i] == ' ' && pheromoneArray[(currentPos.x + (currentPos.y * x_dim)) - i] == 0)
+		{
+			// also in a jump, do we MARK all of the spaces the ant jumps over?
+			MARK();
+			currentPos.y -= 1;
+			checkIfOnDeed();
+			i++;
+		}
+		// in a jump, would that only take one step in the stack memory?
+		steps++;
+	}
+	else if (CWR() == 1)
+	{
+		int i = 1;
+		while (mazeArray[(currentPos.x + (currentPos.y * x_dim)) + i] == ' ' && pheromoneArray[(currentPos.x + (currentPos.y * x_dim)) + i] == 0)
+		{
+			MARK();
+			currentPos.y += 1;
+			checkIfOnDeed();
+			i++;
+		}
+		steps++;
+	}
+	else if (CWF() == 1)
+	{
+		int i = 1;
+		while (mazeArray[(currentPos.x + (currentPos.y * x_dim)) - (x_dim * i)] == ' ' && pheromoneArray[(currentPos.x + (currentPos.y * x_dim)) - (x_dim * i)] == 0)
+		{
+			MARK();
+			currentPos.x += 1;
+			checkIfOnDeed();
+			i++;
+		}
+		steps++;
+	}
+	else if (CWB() == 1)
+	{
+		int i = 1;
+		while (mazeArray[(currentPos.x + (currentPos.y * x_dim)) + (x_dim * i)] == ' ' && pheromoneArray[(currentPos.x + (currentPos.y * x_dim)) + (x_dim * i)] == 0)
+		{
+			MARK();
+			currentPos.x -= 1;
+			checkIfOnDeed();
+			i++;
+		}
+		steps++;
+	}
 
-// void CJPI(){}
+	fprintf(output, "BJPI ()\n");
+}
 
-// void RP(int n, int t){}
+void CJPI()
+{
+	if (CWL() == 1)
+	{
+		MOVE_L;
+	}
+	else if (CWR() == 1)
+	{
+		MOVE_R;
+	}
+	else if (CWF() == 1)
+	{
+		MOVE_F;
+	}
+	else if (CWB() == 1)
+	{
+		MOVE_B;
+	}
+	fprintf(output, "CJPI ()\n");
+}
+
+void RP(int n, int t)
+{
+}
 
 //--------------------------------
 // Other functions, will move to functions.h/functions.c file later
