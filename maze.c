@@ -54,6 +54,7 @@ void MOVE_F()
 	currentPos.x += 1;
 	checkIfOnDeed();
 	steps++;
+	fprintf(output, "MOVE_F ()\n");
 }
 
 void MOVE_B()
@@ -62,6 +63,7 @@ void MOVE_B()
 	currentPos.x -= 1;
 	checkIfOnDeed();
 	steps++;
+	fprintf(output, "MOVE_B ()\n");
 }
 
 void MOVE_L()
@@ -70,6 +72,7 @@ void MOVE_L()
 	currentPos.y -= 1;
 	checkIfOnDeed();
 	steps++;
+	fprintf(output, "MOVE_L ()\n");
 }
 
 void MOVE_R()
@@ -78,10 +81,12 @@ void MOVE_R()
 	currentPos.y += 1;
 	checkIfOnDeed();
 	steps++;
+	fprintf(output, "MOVE_R ()\n");
 }
 
 int CWL() // check left
 {
+	fprintf(output, "CWL ()\n");
 	if (mazeArray[(currentPos.x + (currentPos.y * x_dim)) - 1] == ' ' && pheromoneArray[(currentPos.x + (currentPos.y * x_dim)) - 1] == 0)
 	{
 		return 1;
@@ -91,6 +96,7 @@ int CWL() // check left
 
 int CWR() // check right
 {
+	fprintf(output, "CWR ()\n");
 	if (mazeArray[(currentPos.x + (currentPos.y * x_dim)) + 1] == ' ' && pheromoneArray[(currentPos.x + (currentPos.y * x_dim)) + 1] == 0)
 	{
 		return 1;
@@ -100,6 +106,7 @@ int CWR() // check right
 
 int CWF() // check up
 {
+	fprintf(output, "CWF ()\n");
 	if (mazeArray[(currentPos.x + (currentPos.y * x_dim)) - x_dim] == ' ' && pheromoneArray[(currentPos.x + (currentPos.y * x_dim)) - x_dim] == 0)
 	{
 		return 1;
@@ -109,6 +116,7 @@ int CWF() // check up
 
 int CWB() // check down
 {
+	fprintf(output, "CWB ()\n");
 	if (mazeArray[(currentPos.x + (currentPos.y * x_dim)) + x_dim] == ' ' && pheromoneArray[(currentPos.x + (currentPos.y * x_dim)) + x_dim] == 0)
 	{
 		return 1;
@@ -120,21 +128,25 @@ void PUSH()
 {
 	stack[stackPosition] = currentPos;
 	stackPosition++;
+	fprintf(output, "PUSH ()\n");
 }
 
 void POP()
 {
 	stackPosition--;
+	fprintf(output, "POP ()\n");
 }
 
 coord PEEK()
 {
+	fprintf(output, "PEEK ()\n");
 	return stack[stackPosition - 1];
 }
 
 void CLEAR()
 {
 	stackPosition = 0;
+	fprintf(output, "CLEAR ()\n");
 }
 
 void BACKTRACK()
@@ -143,6 +155,7 @@ void BACKTRACK()
 	POP();
 	currentPos.x = jumpTo.x, currentPos.y = jumpTo.y;
 	steps++;
+	fprintf(output, "BACKTRACK ()\n");
 }
 
 void BJPI() {
@@ -190,6 +203,8 @@ void BJPI() {
 		steps++;
 		
 	}
+	
+	fprintf(output, "BJPI ()\n");
 }
 
 void CJPI() {
@@ -202,10 +217,11 @@ void CJPI() {
 	} else if (CWB() == 1) {
 		MOVE_B;
 	}
+	fprintf(output, "CJPI ()\n");
 }
 
 void RP(int n, int t) {
-
+	
 }
 
 //--------------------------------
