@@ -3,8 +3,8 @@
 #include <string.h>
 #include <ctype.h>
 
-#define STACK_SIZE 30
-#define MAX_MOVES 30
+#define MAX_SIZE 30
+#define MAX_NUMBER_OF_STEPS 30
 
 //--------------------------------
 // global variables
@@ -32,6 +32,7 @@ coord stack[STACK_SIZE];
 int stackPos;
 
 coord currentPos;
+FILE *output;
 
 //--------------------------------
 // 17 main functions
@@ -39,6 +40,7 @@ coord currentPos;
 void MARK()
 {
 	pherArray[(currentPos.x * x_dim) + currentPos.y] = 1;
+	fprintf(output, "Marked spot (%i, %i)\n", currentPos.x, currentPos.y);
 }
 
 void MOVE_F()
@@ -78,7 +80,7 @@ int CWL()
 	return 0;
 }
 
-int CWR()
+int CWR(char *mazeArray, coord currentPos, int x_dim)
 {
 	if (mazeArray[(currentPos.x * x_dim) + currentPos.y + 1] == ' ' && pherArray[(currentPos.x * x_dim) + currentPos.y + 1] == 0)
 	{
@@ -132,6 +134,22 @@ void BJPI()
 
 void CJPI()
 {
+	if (CWL)
+	{
+		MOVE_L;
+	}
+	else if (CWR)
+	{
+		MOVE_R;
+	}
+	else if (CWF)
+	{
+		MOVE_F;
+	}
+	else if (CWB)
+	{
+		MOVE_B;
+	}
 }
 
 void RP(int n, int t)
@@ -159,6 +177,25 @@ void createArrays(int x_dim, int y_dim)
 	}
 }
 
+void findStart()
+{
+	// check all x=0
+	// check all y=0
+	// check all x=x_dim-1
+	// check all y=y_dim-1
+
+	// currentPos.x = whatever;
+	// currentPos.y = whatever;
+}
+
+int *checkSurroundings()
+{
+	CWL();
+	CWR();
+
+	return 1;
+}
+
 //--------------------------------
 
 int main()
@@ -166,16 +203,11 @@ int main()
 	/*
 	int i, j;
 
-
-
-
 		CWL(currentPos.x, currentPos.y);
 		CWR(currentPos.x, currentPos.y);
 		CWF(currentPos.x, currentPos.y);
 		CWB(currentPos.x, currentPos.y);
 
-	*/
-	/*
 		if (CWL(currentPos.x, currentPos.y) == 1) {
 			printf("I feel an itch to the LEFT");
 		} else if (CWR(currentPos.x, currentPos.y) == 1) {
@@ -196,22 +228,31 @@ int main()
 		exit(1);
 	}
 
+	if ((output = fopen("output.txt", "w")) == NULL)
+	{
+		printf("error in opening maze.txt");
+		exit(1);
+	}
+
 	int i, j;
 
-	// get starting position and maze dimensions from input file
-	fscanf(input, "(%i, %i)", &currentPos.x, &currentPos.y);
-	fscanf(input, "%i %i", &x_dim, &y_dim);
-	printf("(%i, %i)\n%i %i\n", currentPos.x, currentPos.y, x_dim, y_dim);
+	// scan a single row to find x_dim
+	// fgets(rowForRowDim, 100, input);
+
+	fclose(input);
+	input = fopen("maze.txt", "r");
+
+	// scan entire file to get y_dim
+	// while(fgets(rowForRowDim, 100, input) != EOF) {
+	// y_dim++;
+	// }
+
+	// some unintended behavior observed, so just reopen text file
+	fclose(input);
+	input = fopen("maze.txt", "r");
 
 	// create arrays
 	createArrays(x_dim, y_dim);
-
-	// some unintended behavior observed, so just reopen text file and read first two lines to start at the beginning of the maze
-	fclose(input);
-	input = fopen("maze.txt", "r");
-	char garbage[100];
-	fgets(garbage, 100, input);
-	fgets(garbage, 100, input);
 
 	// scan maze into array
 	for (i = 0; i < x_dim; i++)
@@ -247,6 +288,9 @@ int main()
 			}
 		}
 	}
+
+	// get starting position and maze dimensions from input file
+	findStart();
 
 	// print maze array
 	for (i = 0; i < x_dim; i++)
