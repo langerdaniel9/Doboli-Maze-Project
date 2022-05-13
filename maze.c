@@ -7,7 +7,7 @@
 #include "prototypes.h"
 
 #define MAX_SIZE 30
-#define MAX_NUMBER_OF_STEPS 30
+#define MAX_NUMBER_OF_STEPS 60
 
 //--------------------------------
 // global variables
@@ -93,7 +93,6 @@ void MOVE_R()
 
 int CWL() // check left
 {
-	fprintf(output, "CWL ()\n");
 	if (mazeArray[(currentPos.x + (currentPos.y * x_dim)) - 1] == ' ' && pheromoneArray[(currentPos.x + (currentPos.y * x_dim)) - 1] == 0)
 	{
 		fprintf(output, "CWL\t\tLeft of (%i, %i) is empty\n", currentPos.x, currentPos.y);
@@ -105,7 +104,6 @@ int CWL() // check left
 
 int CWR() // check right
 {
-	fprintf(output, "CWR ()\n");
 	if (mazeArray[(currentPos.x + (currentPos.y * x_dim)) + 1] == ' ' && pheromoneArray[(currentPos.x + (currentPos.y * x_dim)) + 1] == 0)
 	{
 		fprintf(output, "CWR\t\tRight of (%i, %i) is empty\n", currentPos.x, currentPos.y);
@@ -117,7 +115,6 @@ int CWR() // check right
 
 int CWF() // check up
 {
-	fprintf(output, "CWF ()\n");
 	if (mazeArray[(currentPos.x + (currentPos.y * x_dim)) - x_dim] == ' ' && pheromoneArray[(currentPos.x + (currentPos.y * x_dim)) - x_dim] == 0)
 	{
 		fprintf(output, "CWF\t\tUp of (%i, %i) is empty\n", currentPos.x, currentPos.y);
@@ -129,7 +126,6 @@ int CWF() // check up
 
 int CWB() // check down
 {
-	fprintf(output, "CWB ()\n");
 	if (mazeArray[(currentPos.x + (currentPos.y * x_dim)) + x_dim] == ' ' && pheromoneArray[(currentPos.x + (currentPos.y * x_dim)) + x_dim] == 0)
 	{
 		fprintf(output, "CWB\t\tDown of (%i, %i) is empty\n", currentPos.x, currentPos.y);
@@ -202,6 +198,8 @@ void BACKTRACK()
 	{
 		fprintf(output, "There are no possible moves\n");
 		printf("There are no possible moves\n");
+		fprintf(output, "\n\nPoint total is %i", deedTotal);
+		printf("\n\nPoint total is %i", deedTotal);
 		exit(1);
 	}
 	steps++;
@@ -218,54 +216,63 @@ void BJPI()
 {
 	if (CWL() == 1)
 	{
+		MARK();
 		// i represents the number of spaces jumped over, or the number of consecutive CW functions used
 		int i = 1;
+		
 		while (mazeArray[(currentPos.x + (currentPos.y * x_dim)) - i] == ' ' && pheromoneArray[(currentPos.x + (currentPos.y * x_dim)) - i] == 0)
 		{
 			// also in a jump, do we MARK all of the spaces the ant jumps over?
-			MARK();
-			currentPos.y -= 1;
-			checkIfOnDeed();
 			i++;
 		}
 		// in a jump, would that only take one step in the stack memory?
+		currentPos.y -= i;
+		checkIfOnDeed();
 		steps++;
+		
+		return;
 	}
 	else if (CWR() == 1)
 	{
+		MARK();
 		int i = 1;
 		while (mazeArray[(currentPos.x + (currentPos.y * x_dim)) + i] == ' ' && pheromoneArray[(currentPos.x + (currentPos.y * x_dim)) + i] == 0)
 		{
-			MARK();
-			currentPos.y += 1;
-			checkIfOnDeed();
 			i++;
 		}
+		currentPos.y += i;
+		checkIfOnDeed();
 		steps++;
+		
+		return;
 	}
 	else if (CWF() == 1)
 	{
+		MARK();
 		int i = 1;
 		while (mazeArray[(currentPos.x + (currentPos.y * x_dim)) - (x_dim * i)] == ' ' && pheromoneArray[(currentPos.x + (currentPos.y * x_dim)) - (x_dim * i)] == 0)
 		{
-			MARK();
-			currentPos.x += 1;
-			checkIfOnDeed();
 			i++;
 		}
+		currentPos.x += i;
+		checkIfOnDeed();
 		steps++;
+		
+		return;
 	}
 	else if (CWB() == 1)
 	{
+		MARK();
 		int i = 1;
 		while (mazeArray[(currentPos.x + (currentPos.y * x_dim)) + (x_dim * i)] == ' ' && pheromoneArray[(currentPos.x + (currentPos.y * x_dim)) + (x_dim * i)] == 0)
 		{
-			MARK();
-			currentPos.x -= 1;
-			checkIfOnDeed();
 			i++;
 		}
+		currentPos.x -= i;
+		checkIfOnDeed();
 		steps++;
+		
+		return;
 	}
 
 	fprintf(output, "BJPI ()\n");
@@ -289,7 +296,6 @@ void CJPI()
 	{
 		MOVE_B;
 	}
-	fprintf(output, "CJPI ()\n");
 }
 
 void RP(int n, int t)
