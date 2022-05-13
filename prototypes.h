@@ -65,6 +65,8 @@ void reviewPriorities();
 
 void checkIfOnDeed();
 
+int random(int min, int max);
+
 void printMaze();
 
 void printDeed();

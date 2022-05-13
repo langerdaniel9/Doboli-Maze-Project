@@ -2,10 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <time.h>
+#include <stdbool.h>
 #include "prototypes.h"
 
 #define MAX_SIZE 30
-#define MAX_NUMBER_OF_STEPS 2
+#define MAX_NUMBER_OF_STEPS 30
 
 //--------------------------------
 // global variables
@@ -30,6 +32,7 @@ coord currentPos;
 int priority = 0;
 int steps = 0;
 int deedTotal = 0;
+int srandCall = 0;
 
 coord stack[MAX_SIZE];
 int stackPosition = 0;
@@ -45,47 +48,57 @@ FILE *input;
 void MARK()
 {
 	pheromoneArray[currentPos.x + currentPos.y * x_dim] = 1;
-	fprintf(output, "Marked spot (%i, %i)\n", currentPos.x, currentPos.y);
+	fprintf(output, "MARK\t\tMarked spot (%i, %i)\n", currentPos.x, currentPos.y);
 }
 
 void MOVE_F()
 {
-	MARK();
-	currentPos.x += 1;
-	checkIfOnDeed();
+	// Move up one spot (↑) and mark previous square
 	steps++;
+	MARK();
+	currentPos.y -= 1;
+	fprintf(output, "MOVE_F\t\tMoved up to (%i, %i) | Step Count = %i\n", currentPos.x, currentPos.y, steps);
+	checkIfOnDeed();
 }
 
 void MOVE_B()
 {
-	MARK();
-	currentPos.x -= 1;
-	checkIfOnDeed();
+	// Move down one spot (↓) and mark previous square
 	steps++;
+	MARK();
+	currentPos.y += 1;
+	fprintf(output, "MOVE_B\t\tMoved down to (%i, %i) | Step Count = %i\n", currentPos.x, currentPos.y, steps);
+	checkIfOnDeed();
 }
 
 void MOVE_L()
 {
-	MARK();
-	currentPos.y -= 1;
-	checkIfOnDeed();
+	// Move left one spot (←) and mark previous square
 	steps++;
+	MARK();
+	currentPos.x -= 1;
+	fprintf(output, "MOVE_L\t\tMoved left to (%i, %i) | Step Count = %i\n", currentPos.x, currentPos.y, steps);
+	checkIfOnDeed();
 }
 
 void MOVE_R()
 {
-	MARK();
-	currentPos.y += 1;
-	checkIfOnDeed();
+	// Move right one spot (→) and mark previous square
 	steps++;
+	MARK();
+	currentPos.x += 1;
+	fprintf(output, "MOVE_R\t\tMoved right to (%i, %i) | Step Count = %i\n", currentPos.x, currentPos.y, steps);
+	checkIfOnDeed();
 }
 
 int CWL() // check left
 {
 	if (mazeArray[(currentPos.x + (currentPos.y * x_dim)) - 1] == ' ' && pheromoneArray[(currentPos.x + (currentPos.y * x_dim)) - 1] == 0)
 	{
+		fprintf(output, "CWL\t\tLeft of (%i, %i) is empty\n", currentPos.x, currentPos.y);
 		return 1;
 	}
+	fprintf(output, "CWL\t\tLeft of (%i, %i) is occupied\n", currentPos.x, currentPos.y);
 	return 0;
 }
 
@@ -93,8 +106,10 @@ int CWR() // check right
 {
 	if (mazeArray[(currentPos.x + (currentPos.y * x_dim)) + 1] == ' ' && pheromoneArray[(currentPos.x + (currentPos.y * x_dim)) + 1] == 0)
 	{
+		fprintf(output, "CWR\t\tRight of (%i, %i) is empty\n", currentPos.x, currentPos.y);
 		return 1;
 	}
+	fprintf(output, "CWR\t\tRight of (%i, %i) is occupied\n", currentPos.x, currentPos.y);
 	return 0;
 }
 
@@ -102,47 +117,93 @@ int CWF() // check up
 {
 	if (mazeArray[(currentPos.x + (currentPos.y * x_dim)) - x_dim] == ' ' && pheromoneArray[(currentPos.x + (currentPos.y * x_dim)) - x_dim] == 0)
 	{
+		fprintf(output, "CWF\t\tUp of (%i, %i) is empty\n", currentPos.x, currentPos.y);
 		return 1;
 	}
 	return 0;
+	fprintf(output, "CWF\t\tUp of (%i, %i) is occupied\n", currentPos.x, currentPos.y);
 }
 
 int CWB() // check down
 {
 	if (mazeArray[(currentPos.x + (currentPos.y * x_dim)) + x_dim] == ' ' && pheromoneArray[(currentPos.x + (currentPos.y * x_dim)) + x_dim] == 0)
 	{
+		fprintf(output, "CWB\t\tDown of (%i, %i) is empty\n", currentPos.x, currentPos.y);
 		return 1;
 	}
+	fprintf(output, "CWB\t\tDown of (%i, %i) is occupied\n", currentPos.x, currentPos.y);
 	return 0;
 }
 
 void PUSH()
 {
+	int i;
 	stack[stackPosition] = currentPos;
 	stackPosition++;
+	fprintf(output, "PUSH\t\tPushed (%i, %i) to stack\n", currentPos.x, currentPos.y);
+	fprintf(output, "Stack is now: ");
+	for (i = 0; i < stackPosition; i++)
+	{
+		coord stackPos = stack[i];
+		fprintf(output, "(%i, %i) ", stackPos.x, stackPos.y);
+	}
+	fprintf(output, "\n");
 }
 
 void POP()
 {
+	int i;
 	stackPosition--;
+	fprintf(output, "\tPOP Popped top of stack\n");
+	fprintf(output, "Stack is now: ");
+	for (i = 0; i < stackPosition; i++)
+	{
+		coord stackPos = stack[i];
+		fprintf(output, "(%i, %i) ", stackPos.x, stackPos.y);
+	}
+	fprintf(output, "\n");
 }
 
 coord PEEK()
 {
+	int i;
+	fprintf(output, "\tPEEK Peeked (%i, %i) from top of stack\n", stack[stackPosition - 1].x, stack[stackPosition - 1].y);
 	return stack[stackPosition - 1];
 }
 
 void CLEAR()
 {
-	stackPosition = 0;
+	// Remove all but one stored location
+	// Need to keep at least one because otherwise execution will just end since there are no possible moves
+	stackPosition = 1;
+	int i;
+	fprintf(output, "CLEAR\t\tCleared stack\n");
+	fprintf(output, "Stack is now: ");
+	for (i = 0; i < stackPosition; i++)
+	{
+		coord stackPos = stack[i];
+		fprintf(output, "(%i, %i) ", stackPos.x, stackPos.y);
+	}
+	fprintf(output, "\n");
 }
 
 void BACKTRACK()
 {
+	// Only gets called if there are no more immediate possible moves, so if there is nothing stored in the stack then there are no moves left at all
+	if (stackPosition == 0)
+	{
+		fprintf(output, "There are no possible moves\n");
+		printf("There are no possible moves\n");
+		exit(1);
+	}
+	steps++;
+	MARK();
+	fprintf(output, "BACKTRACK\tUsing PEEK:\n");
 	coord jumpTo = PEEK();
+	fprintf(output, "BACKTRACK\tUsing POP:\n");
 	POP();
 	currentPos.x = jumpTo.x, currentPos.y = jumpTo.y;
-	steps++;
+	fprintf(output, "BACKTRACK\tMoving back to peeked position (%i, %i) | Step Count = %i\n", currentPos.x, currentPos.y, steps);
 }
 
 // void BJPI(){}
@@ -156,12 +217,12 @@ void BACKTRACK()
 
 void findDims()
 {
-	int i;
 	// scan a single row to find x_dim
 	char rowForRowDim[100];
 	input = fopen("maze.txt", "r");
 
 	fgets(rowForRowDim, 100, input);
+	int i;
 	for (i = 0; i < strlen(rowForRowDim); i++)
 	{
 		if (rowForRowDim[i] == '*' || rowForRowDim[i] == ' ')
@@ -186,9 +247,6 @@ void findDims()
 		y_dim++;
 	}
 	fclose(input);
-
-	// reopen file again
-	input = fopen("maze.txt", "r");
 }
 
 void createArrays()
@@ -211,6 +269,10 @@ void createArrays()
 
 void scan()
 {
+	// reopen file
+	input = fopen("maze.txt", "r");
+
+	// Scans the input file into the necessary arrays
 	int i, j;
 	for (i = 0; i < x_dim; i++)
 	{
@@ -254,18 +316,16 @@ void findStart()
 	// checks the left and right columns to check for the entrance
 	for (i = 0; i < y_dim; i++)
 	{
-		// top row
+		// check the left column
 		if (mazeArray[i * x_dim] == ' ')
 		{
-			printf("here1 %i\n", i);			// top row
 			currentPos.x = 0, currentPos.y = i; // Good
 			return;
 		}
-		// bottom row
+		// check the right column
 		else if (mazeArray[(i * x_dim) + x_dim - 1] == ' ')
 		{
-			printf("here2 %i\n", i);					// bottom row
-			currentPos.x = x_dim - 1, currentPos.y = i; // Good
+			currentPos.x = x_dim - 1, currentPos.y = i; //
 			return;
 		}
 	}
@@ -276,15 +336,13 @@ void findStart()
 		// check the top row
 		if (mazeArray[i] == ' ')
 		{
-			printf("here3 %i\n", i);
-			currentPos.x = y_dim, currentPos.y = i;
+			currentPos.x = i, currentPos.y = 0; // Good
 			return;
 		}
 		// check the bottom row
-		else if (mazeArray[(i * y_dim) + i] == ' ')
+		else if (mazeArray[((x_dim - 1) * y_dim) + i] == ' ')
 		{
-			printf("here4 %i\n", i); // Left column & right column
-			currentPos.x = x_dim, currentPos.y = i + 1;
+			currentPos.x = i, currentPos.y = x_dim - 1; // Good
 			return;
 		}
 	}
@@ -294,34 +352,37 @@ void findStart()
 
 void checkSurroundings()
 {
-	printf("current position = %i, %i\n", currentPos.x, currentPos.y);
+	// If there are more than 1 possible moves, save this coordinate to come back to later
 	if (CWL() + CWF() + CWR() + CWB() > 1)
 	{
+		fprintf(output, "Multiple paths detected\n");
 		PUSH();
 	}
 
+	// Use the priority to decide the general direction to head towards, with some random variation to keep the path different run to run
 	switch (priority)
 	{
+	// Default priority, finds which direction to head towards, which gives you the relative location, ie top/right/bottom/left of maze, so prioritize moving towards the center. If you are at top of maze, only move is to go down, so continue to prioritize going generally downward
 	case 0:
 	{ // default
-		if (CWL)
+		if (CWL())
 		{
 			priority = 1;
 			MOVE_L();
 		}
-		else if (CWF)
+		else if (CWF())
 		{
-			priority = 3;
+			priority = 2;
 			MOVE_F();
 		}
-		else if (CWR)
+		else if (CWR())
 		{
-			priority = 5;
+			priority = 3;
 			MOVE_R();
 		}
-		else if (CWB)
+		else if (CWB())
 		{
-			priority = 7;
+			priority = 4;
 			MOVE_B();
 		}
 		else
@@ -333,24 +394,223 @@ void checkSurroundings()
 	break;
 
 	case 1:
-	{ // gradient ←
-		if (CWL)
+	{ // generally ←
+		bool moved = false;
+		int rand = random(1, 4);
+		switch (rand)
 		{
-			MOVE_L();
-		}
-		else if (CWF)
+		case 1:
 		{
-			MOVE_F();
+			if (CWL())
+			{
+				moved = true;
+				MOVE_L();
+			}
+			else if (CWF())
+			{
+				moved = true;
+				MOVE_F();
+			}
+			else if (CWB())
+			{
+				moved = true;
+				MOVE_B();
+			}
+			else if (CWR())
+			{
+				moved = true;
+				MOVE_R();
+			}
+
+			break;
 		}
-		else if (CWB)
+		case 2:
 		{
-			MOVE_B();
+			if (CWL())
+			{
+				moved = true;
+				MOVE_L();
+			}
+			else if (CWB())
+			{
+				moved = true;
+				MOVE_B();
+			}
+			else if (CWF())
+			{
+				moved = true;
+				MOVE_F();
+			}
+			else if (CWR())
+			{
+				moved = true;
+				MOVE_R();
+			}
+			break;
 		}
-		else if (CWR)
+		case 3:
 		{
-			MOVE_R();
+			if (CWF())
+			{
+				moved = true;
+				MOVE_F();
+			}
+			else if (CWL())
+			{
+				moved = true;
+				MOVE_L();
+			}
+			else if (CWB())
+			{
+				moved = true;
+				MOVE_B();
+			}
+			else if (CWR())
+			{
+				moved = true;
+				MOVE_R();
+			}
+			break;
 		}
-		else
+		case 4:
+		{
+			if (CWB())
+			{
+				moved = true;
+				MOVE_B();
+			}
+			else if (CWL())
+			{
+				moved = true;
+				MOVE_L();
+			}
+			else if (CWF())
+			{
+				moved = true;
+				MOVE_F();
+			}
+			else if (CWR())
+			{
+				moved = true;
+				MOVE_R();
+			}
+			break;
+		}
+		}
+
+		if (!moved)
+		{
+			BACKTRACK();
+		}
+	}
+	break;
+
+	case 2:
+	{ // generally ↑
+		bool moved = false;
+		int rand = random(1, 4);
+		switch (rand)
+		{
+		case 1:
+		{
+			if (CWF())
+			{
+				moved = true;
+				MOVE_F();
+			}
+			else if (CWL())
+			{
+				moved = true;
+				MOVE_L();
+			}
+			else if (CWR())
+			{
+				moved = true;
+				MOVE_R();
+			}
+			else if (CWB())
+			{
+				moved = true;
+				MOVE_B();
+			}
+
+			break;
+		}
+		case 2:
+		{
+			if (CWF())
+			{
+				moved = true;
+				MOVE_F();
+			}
+			else if (CWR())
+			{
+				moved = true;
+				MOVE_R();
+			}
+			else if (CWL())
+			{
+				moved = true;
+				MOVE_L();
+			}
+			else if (CWB())
+			{
+				moved = true;
+				MOVE_B();
+			}
+			break;
+		}
+		case 3:
+		{
+			if (CWL())
+			{
+				moved = true;
+				MOVE_L();
+			}
+			else if (CWF())
+			{
+				moved = true;
+				MOVE_F();
+			}
+			else if (CWR())
+			{
+				moved = true;
+				MOVE_R();
+			}
+			else if (CWB())
+			{
+				moved = true;
+				MOVE_B();
+			}
+			break;
+		}
+		case 4:
+		{
+			if (CWR())
+			{
+				moved = true;
+				MOVE_R();
+			}
+			else if (CWF())
+			{
+				moved = true;
+				MOVE_F();
+			}
+			else if (CWL())
+			{
+				moved = true;
+				MOVE_L();
+			}
+			else if (CWB())
+			{
+				moved = true;
+				MOVE_B();
+			}
+			break;
+		}
+		}
+
+		if (!moved)
 		{
 			BACKTRACK();
 		}
@@ -358,74 +618,223 @@ void checkSurroundings()
 	break;
 
 	case 3:
-	{ // gradient ↑
-		if (CWF)
+	{ // generally →
+		bool moved = false;
+		int rand = random(1, 4);
+		switch (rand)
 		{
-			MOVE_F();
-		}
-		else if (CWL)
+		case 1:
 		{
-			MOVE_L();
+			if (CWR())
+			{
+				moved = true;
+				MOVE_R();
+			}
+			else if (CWF())
+			{
+				moved = true;
+				MOVE_F();
+			}
+			else if (CWB())
+			{
+				moved = true;
+				MOVE_B();
+			}
+			else if (CWL())
+			{
+				moved = true;
+				MOVE_L();
+			}
+
+			break;
 		}
-		else if (CWR)
+		case 2:
 		{
-			MOVE_R();
+			if (CWR())
+			{
+				moved = true;
+				MOVE_R();
+			}
+			else if (CWB())
+			{
+				moved = true;
+				MOVE_B();
+			}
+			else if (CWF())
+			{
+				moved = true;
+				MOVE_F();
+			}
+			else if (CWL())
+			{
+				moved = true;
+				MOVE_L();
+			}
+			break;
 		}
-		else if (CWB)
+		case 3:
 		{
-			MOVE_B();
+			if (CWF())
+			{
+				moved = true;
+				MOVE_F();
+			}
+			else if (CWR())
+			{
+				moved = true;
+				MOVE_R();
+			}
+			else if (CWB())
+			{
+				moved = true;
+				MOVE_B();
+			}
+			else if (CWL())
+			{
+				moved = true;
+				MOVE_L();
+			}
+			break;
 		}
-		else
+		case 4:
+		{
+			if (CWB())
+			{
+				moved = true;
+				MOVE_B();
+			}
+			else if (CWR())
+			{
+				moved = true;
+				MOVE_R();
+			}
+			else if (CWF())
+			{
+				moved = true;
+				MOVE_F();
+			}
+			else if (CWL())
+			{
+				moved = true;
+				MOVE_L();
+			}
+			break;
+		}
+		}
+
+		if (!moved)
 		{
 			BACKTRACK();
 		}
 	}
 	break;
 
-	case 5:
-	{ // gradient →
-		if (CWR)
+	case 4:
+	{ // generally ↓
+		bool moved = false;
+		int rand = random(1, 4);
+		switch (rand)
 		{
-			MOVE_R();
-		}
-		else if (CWF)
+		case 1:
 		{
-			MOVE_F();
-		}
-		else if (CWB)
-		{
-			MOVE_B();
-		}
-		else if (CWL)
-		{
-			MOVE_L();
-		}
-		else
-		{
-			BACKTRACK();
-		}
-	}
-	break;
+			if (CWB())
+			{
+				moved = true;
+				MOVE_B();
+			}
+			else if (CWR())
+			{
+				moved = true;
+				MOVE_R();
+			}
+			else if (CWL())
+			{
+				moved = true;
+				MOVE_L();
+			}
+			else if (CWF())
+			{
+				moved = true;
+				MOVE_F();
+			}
 
-	case 7:
-	{ // gradient ↓
-		if (CWB)
-		{
-			MOVE_B();
+			break;
 		}
-		else if (CWL)
+		case 2:
 		{
-			MOVE_L();
+			if (CWB())
+			{
+				moved = true;
+				MOVE_B();
+			}
+			else if (CWL())
+			{
+				moved = true;
+				MOVE_L();
+			}
+			else if (CWR())
+			{
+				moved = true;
+				MOVE_R();
+			}
+			else if (CWF())
+			{
+				moved = true;
+				MOVE_F();
+			}
+			break;
 		}
-		else if (CWR)
+		case 3:
 		{
-			MOVE_R();
+			if (CWR())
+			{
+				moved = true;
+				MOVE_R();
+			}
+			else if (CWB())
+			{
+				moved = true;
+				MOVE_B();
+			}
+			else if (CWL())
+			{
+				moved = true;
+				MOVE_L();
+			}
+			else if (CWF())
+			{
+				moved = true;
+				MOVE_F();
+			}
+			break;
 		}
-		else if (CWF)
+		case 4:
 		{
-			MOVE_F();
+			if (CWL())
+			{
+				moved = true;
+				MOVE_L();
+			}
+			else if (CWB())
+			{
+				moved = true;
+				MOVE_B();
+			}
+			else if (CWR())
+			{
+				moved = true;
+				MOVE_R();
+			}
+			else if (CWF())
+			{
+				moved = true;
+				MOVE_F();
+			}
+			break;
 		}
-		else
+		}
+
+		if (!moved)
 		{
 			BACKTRACK();
 		}
@@ -436,29 +845,122 @@ void checkSurroundings()
 
 void logic()
 {
+	// While there are steps available, check surroundings and move
 	while (steps < MAX_NUMBER_OF_STEPS)
 	{
 		checkSurroundings();
 	}
+	// When out of steps, print point total
+	fprintf(output, "\n\nPoint total is %i", deedTotal);
 }
 
 void reviewPriorities()
 {
+	int i;
+	int m = stack2Position - 1;
+
+	// First bubble sort stack2 by increasing point value
+	bool sorted = false;
+	deed temp;
+	while (!sorted)
+	{
+		sorted = true;
+		for (i = 0; i < m; i++)
+		{
+			if (stack2[i].value < stack2[i + 1].value)
+			{
+				temp = stack2[i];
+				stack2[i] = stack2[i + 1];
+				stack2[i + 1] = temp;
+				sorted = false;
+			}
+		}
+	}
+
+	// If multiple are found to be true, then itll pick the one that is first in the order
+	int left = 0, right = 0, up = 0, down = 0;
+
+	for (i = 0; i < stack2Position - 1; i++)
+	{
+		// See if x continuously increases, if so then prioritize moving left
+		if (stack2[i].location.x >= stack2[i + 1].location.x)
+		{
+			left++;
+		}
+		// See if x continuously decreases, if so then prioritize moving right
+		else if (stack2[i].location.x <= stack2[i + 1].location.x)
+		{
+			right++;
+		}
+		// See if y continuously increases, if so then prioritize moving up
+		else if (stack2[i].location.y <= stack2[i + 1].location.y)
+		{
+			up++;
+		}
+		// See if y continuously decreases, if so then prioritize moving down
+		else if (stack2[i].location.y >= stack2[i + 1].location.y)
+		{
+			down++;
+		}
+	}
+
+	if (left == m)
+	{
+		fprintf(output, "Changed priority from %i to 1\n", priority);
+		priority = 1;
+		return;
+	}
+	else if (right == m)
+	{
+		fprintf(output, "Changed priority from %i to 3\n", priority);
+		priority = 3;
+		return;
+	}
+	else if (up == m)
+	{
+		fprintf(output, "Changed priority from %i to 2\n", priority);
+		priority = 2;
+		return;
+	}
+	else if (down == m)
+	{
+		fprintf(output, "Changed priority from %i to 4\n", priority);
+		priority = 4;
+	}
 }
 
 void checkIfOnDeed()
 {
+	// Checks to see if you are on the same space as a deed
 	if (deedArray[currentPos.x + (currentPos.y * x_dim)] > 0)
 	{
+		fprintf(output, "Found a Deed worth %i at (%i, %i)\n", deedArray[currentPos.x + (currentPos.y * x_dim)], currentPos.x, currentPos.y);
+		// If so collect that point value
 		deedTotal += deedArray[currentPos.x + (currentPos.y * x_dim)];
+		// Add the location as well as deed value to stack2
 		stack2[stack2Position].location = currentPos;
 		stack2[stack2Position].value = deedArray[currentPos.x + (currentPos.y * x_dim)];
+		// Remove the deed from the current spot (it has already been picked up, and cant be picked up multiple times)
+		deedArray[currentPos.x + (currentPos.y * x_dim)] = 0;
 		stack2Position++;
+		// If you have collected at least two deeds, there is potential to find a pattern, so try to find a pattern for them
 		if (stack2Position > 1)
 		{
 			reviewPriorities();
 		}
 	}
+}
+
+int random(int min, int max)
+{
+	// returns a random value between int min and int max, inclusive
+	if (srandCall == 0)
+	{
+		srand(time(NULL));
+		srandCall = 1;
+	}
+
+	return ((rand() % max) + min);
 }
 
 void printMaze()
@@ -543,7 +1045,14 @@ int main()
 		{
 			printf("\n");
 		}
-		printf("%c ", mazeArray[i]);
+		if (pheromoneArray[i] == 1)
+		{
+			printf("|X|%i| ", deedArray[i]);
+		}
+		else
+		{
+			printf("|%c|%i| ", mazeArray[i], deedArray[i]);
+		}
 	}
 
 	// print maze array
@@ -555,7 +1064,7 @@ int main()
 	// print pheremone array
 	// printPheromone();
 
-	// printf("Point Total = %i\n", deedTotal);
+	printf("\nPoint Total = %i\n", deedTotal);
 
 	return 0;
 }
