@@ -3,14 +3,16 @@
 #include <string.h>
 #include <ctype.h>
 
+#define STACK_SIZE 30
+#define MAX_MOVES 30
+
 //--------------------------------
+// global variables
 typedef struct coord
 {
 	int x;
 	int y;
 } coord;
-
-coord currentPos;
 
 typedef struct deed
 {
@@ -18,120 +20,92 @@ typedef struct deed
 	int value;
 } deed;
 
-char test_maze[10][10] = {
-	{'*', ' ', '*', '*', '*', '*', '*', '*', '*', '*'},
-	{'*', ' ', '*', '*', '*', '*', '*', '*', '*', '*'},
-	{'*', ' ', '*', '*', '*', '*', '*', '*', '*', '*'},
-	{'*', ' ', '*', '*', '*', '*', '*', '*', '*', '*'},
-	{'*', ' ', '*', '*', '*', '*', '*', '*', '*', '*'},
-	{'*', ' ', '*', '*', '*', '*', '*', '*', '*', '*'},
-	{'*', ' ', '*', '*', '*', '*', '*', '*', '*', '*'},
-	{'*', ' ', '*', '*', '*', '*', '*', '*', '*', '*'},
-	{'*', ' ', '*', '*', '*', '*', '*', '*', '*', '*'},
-	{'*', ' ', '*', '*', '*', '*', '*', '*', '*', '*'}};
+char *mazeArray;
+int *deedArray;
+int *pherArray;
 
-char pher_maze[10][10] = {
-	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-	{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+int x_dim;
+int y_dim;
+int moves = 0;
+
+coord stack[STACK_SIZE];
+int stackPos;
+
+coord currentPos;
 
 //--------------------------------
-
 // 17 main functions
 // Change and fill in as needed, will move to stack.h/stack.c file later
 void MARK()
 {
-	pherArray[currentPos.x][currentPos.y] = 1;
+	pherArray[(currentPos.x * x_dim) + currentPos.y] = 1;
 }
 
 void MOVE_F()
 {
 	currentPos.x += 1;
-	//	printf("(%i, %i)\n", currentPos.x, currentPos.y);
+	MARK();
+	moves++;
 }
 
 void MOVE_B()
 {
 	currentPos.x -= 1;
-	//	printf("(%i, %i)\n", currentPos.x, currentPos.y);
+	MARK();
+	moves++;
 }
 
 void MOVE_L()
 {
 	currentPos.y -= 1;
-	//	printf("(%i, %i)\n", currentPos.x, currentPos.y);
+	MARK();
+	moves++;
 }
 
 void MOVE_R()
 {
 	currentPos.y += 1;
-	//	printf("(%i, %i)\n", currentPos.x, currentPos.y);
+	MARK();
+	moves++;
 }
 
-void CWL()
+int CWL()
 {
-	if ((currentPos.y - 1) == ' ' && pher_maze[x][y - 1] == 0)
+	if (mazeArray[(currentPos.x * x_dim) + currentPos.y - 1] == ' ' && pherArray[(currentPos.x * x_dim) + currentPos.y - 1] == 0)
 	{
-		printf("I feel an itch to the LEFT\n");
 		return 1;
 	}
-	else
-	{
-		printf("I feel NO ITCH\n");
-		return 0;
-	}
+	return 0;
 }
 
-void CWR()
+int CWR()
 {
-	if ((currentPos.y + 1) == ' ' && pher_maze[x][y + 1] == 0)
+	if (mazeArray[(currentPos.x * x_dim) + currentPos.y + 1] == ' ' && pherArray[(currentPos.x * x_dim) + currentPos.y + 1] == 0)
 	{
-		printf("I feel an itch to the RIGHT\n");
 		return 1;
 	}
-	else
-	{
-		printf("I feel NO ITCH\n");
-		return 0;
-	}
+	return 0;
 }
 
-void CWF()
+int CWF()
 {
-	if ((currentPos.x + 1) == ' ' && pher_maze[x + 1][y] == 0)
+	if (mazeArray[((currentPos.x + 1) * x_dim) + currentPos.y] == ' ' && pherArray[((currentPos.x + 1) * x_dim) + currentPos.y] == 0)
 	{
-		printf("I feel an itch FORWARD\n");
 		return 1;
 	}
-	else
-	{
-		printf("I feel NO ITCH\n");
-		return 0;
-	}
+	return 0;
 }
 
-void CWB()
+int CWB()
 {
-	if ((currentPos.x - 1) == ' ' && pher_maze[x - 1][y] == 0)
+	if (mazeArray[((currentPos.x - 1) * x_dim) + currentPos.y] == ' ' && pherArray[((currentPos.x - 1) * x_dim) + currentPos.y] == 0)
 	{
-		printf("I feel an itch BACKWARDS\n");
 		return 1;
 	}
-	else
-	{
-		printf("I feel NO ITCH\n");
-		return 0;
-	}
+	return 0;
 }
 
-void PUSH()
+void PUSH(coord pos)
 {
 }
 
@@ -145,6 +119,11 @@ void PEEK()
 
 void CLEAR()
 {
+	stackPos = 0;
+}
+
+void BACKTRACK()
+{
 }
 
 void BJPI()
@@ -155,10 +134,6 @@ void CJPI()
 {
 }
 
-void BACKTRACK()
-{
-}
-
 void RP(int n, int t)
 {
 }
@@ -166,42 +141,33 @@ void RP(int n, int t)
 //--------------------------------
 // Other functions
 
+void createArrays(int x_dim, int y_dim)
+{
+	// create maze array
+	mazeArray = (char *)malloc(((x_dim) * (y_dim)) * sizeof(char *));
+
+	// create deed and pheremone array
+	deedArray = (int *)malloc(((x_dim) * (y_dim)) * sizeof(int *));
+	pherArray = (int *)malloc(((x_dim) * (y_dim)) * sizeof(int *));
+
+	// initialize both to zero
+	int i;
+	for (i = 0; i < (x_dim * y_dim); i++)
+	{
+		deedArray[i] = 0;
+		pherArray[i] = 0;
+	}
+}
+
 //--------------------------------
 
 int main()
 {
 	/*
 	int i, j;
-	for (i = 0; i < 10; i++) {
-		for (j = 0; j < 10; j++) {
-			printf("%c", test_maze[i][j]);
-		}
-		printf("\n");
-	}
 
-	printf("\n");
 
-	for (i = 0; i < 10; i++) {
-		for (j = 0; j < 10; j++) {
-			printf("%i", pher_maze[i][j]);
-		}
-		printf("\n");
-	}
 
-	printf("\n");
-	*/
-
-	//	coord currentPos;
-	//	currentPos.x = 0;
-	//	currentPos.y = 1;
-
-	/*
-		if (test_maze[currentPos.x][currentPos.y] != ' ') {
-			printf("You're in a wall, buddy!\n");
-			return 1;
-		} else {
-			printf("You're good! Here's your starting position: (%i, %i)\n", currentPos.x, currentPos.y);
-		}
 
 		CWL(currentPos.x, currentPos.y);
 		CWR(currentPos.x, currentPos.y);
@@ -231,50 +197,14 @@ int main()
 	}
 
 	int i, j;
-	int x_dim, y_dim;
 
 	// get starting position and maze dimensions from input file
 	fscanf(input, "(%i, %i)", &currentPos.x, &currentPos.y);
 	fscanf(input, "%i %i", &x_dim, &y_dim);
-	// printf("(%i, %i)\n%i %i\n", starting_x, starting_y, x_dim, y_dim);
+	printf("(%i, %i)\n%i %i\n", currentPos.x, currentPos.y, x_dim, y_dim);
 
-	MARK();
-	MOVE_F();
-	MARK();
-	MOVE_R();
-	MARK();
-	MOVE_B();
-	MARK();
-	MOVE_L();
-	MARK();
-
-	for (i = 0; i < 10; i++)
-	{
-		for (j = 0; j < 10; j++)
-		{
-			printf("%i", pher_maze[i][j]);
-		}
-		printf("\n");
-	}
-
-	// create both arrays
-	// create maze array
-	char *mazeArray = (char *)malloc(((x_dim) * (y_dim)) * sizeof(char *));
-
-	// create deed array
-	int *deedArray = (int *)malloc(((x_dim) * (y_dim)) * sizeof(int *));
-	for (i = 0; i < (x_dim * y_dim); i++)
-	{
-		deedArray[i] = 0;
-	}
-
-	// creating pheremone array (initally all values into 0)
-
-	int *pherArray = (int *)malloc(((x_dim) * (y_dim)) * sizeof(int *));
-	for (i = 0; i < (x_dim * y_dim); i++)
-	{
-		pherArray[i] = 0;
-	}
+	// create arrays
+	createArrays(x_dim, y_dim);
 
 	// some unintended behavior observed, so just reopen text file and read first two lines to start at the beginning of the maze
 	fclose(input);
