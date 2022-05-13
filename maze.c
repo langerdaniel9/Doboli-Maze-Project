@@ -5,6 +5,8 @@
 #include <time.h>
 #include <stdbool.h>
 #include "prototypes.h"
+#include "main_17.c"
+#include "other_functions.c"
 
 #define MAX_SIZE 30
 #define MAX_NUMBER_OF_STEPS 30
