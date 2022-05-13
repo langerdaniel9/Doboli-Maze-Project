@@ -1,3 +1,8 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_SIZE 30
+#define MAX_NUMBER_OF_STEPS 30
 //--------------------------------
 typedef struct coord
 {
@@ -10,6 +15,26 @@ typedef struct deed
     coord location;
     int value;
 } deed;
+
+char *mazeArray;
+int *deedArray;
+int *pheromoneArray;
+
+int x_dim = 0, y_dim = 0;
+coord currentPos;
+int priority = 0;
+int steps = 0;
+int deedTotal = 0;
+int srandCall = 0;
+
+coord stack[MAX_SIZE];
+int stackPosition = 0;
+
+deed stack2[100];
+int stack2Position = 0;
+
+FILE *output;
+FILE *input;
 
 // 17 main functions, will move to main17.h/main17.c file later
 void MARK();
