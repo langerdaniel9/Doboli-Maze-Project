@@ -7,7 +7,7 @@
 #include "prototypes.h"
 
 #define MAX_SIZE 30
-#define MAX_NUMBER_OF_STEPS 60
+#define MAX_NUMBER_OF_STEPS 30
 
 //--------------------------------
 // global variables
