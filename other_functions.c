@@ -805,6 +805,6 @@ void finished()
 
 	printMaze();
 	printf("\n\n");
-	printf("Point total is %i\n(Find the logic used in this maze in the output.txt file)", deedTotal);
+	printf("Point total is %i\n(Find the actions taken in this maze in the output.txt file)", deedTotal);
 	exit(3);
 }
