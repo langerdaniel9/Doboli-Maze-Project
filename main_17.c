@@ -84,8 +84,8 @@ int CWF() // check up
 		fprintf(output, "CWF\t\tUp of (%i, %i) is empty\n", currentPos.x, currentPos.y);
 		return 1;
 	}
-	return 0;
 	fprintf(output, "CWF\t\tUp of (%i, %i) is occupied\n", currentPos.x, currentPos.y);
+	return 0;
 }
 
 int CWB() // check down
@@ -156,11 +156,7 @@ void BACKTRACK()
 	// Only gets called if there are no more immediate possible moves, so if there is nothing stored in the stack then there are no moves left at all
 	if (stackPosition == 0)
 	{
-		fprintf(output, "There are no possible moves\n");
-		printf("There are no possible moves\n");
-		fprintf(output, "\n\nPoint total is %i", deedTotal);
-		printf("\n\nPoint total is %i", deedTotal);
-		exit(1);
+		finished();
 	}
 	steps++;
 	MARK();
@@ -179,7 +175,7 @@ void BJPI()
 		MARK();
 		// i represents the number of spaces jumped over, or the number of consecutive CW functions used
 		int i = 1;
-		
+
 		while (mazeArray[(currentPos.x + (currentPos.y * x_dim)) - i] == ' ' && pheromoneArray[(currentPos.x + (currentPos.y * x_dim)) - i] == 0)
 		{
 			// also in a jump, do we MARK all of the spaces the ant jumps over?
@@ -189,7 +185,7 @@ void BJPI()
 		currentPos.y -= i;
 		checkIfOnDeed();
 		steps++;
-		
+
 		return;
 	}
 	else if (CWR() == 1)
@@ -203,7 +199,7 @@ void BJPI()
 		currentPos.y += i;
 		checkIfOnDeed();
 		steps++;
-		
+
 		return;
 	}
 	else if (CWF() == 1)
@@ -217,7 +213,7 @@ void BJPI()
 		currentPos.x += i;
 		checkIfOnDeed();
 		steps++;
-		
+
 		return;
 	}
 	else if (CWB() == 1)
@@ -231,7 +227,7 @@ void BJPI()
 		currentPos.x -= i;
 		checkIfOnDeed();
 		steps++;
-		
+
 		return;
 	}
 
@@ -258,6 +254,11 @@ void CJPI()
 	}
 }
 
-void RP(int n, int t)
+void RP(void (*function)(), int t)
 {
+	int i;
+	for (i = 0; i < t; i++)
+	{
+		function();
+	}
 }

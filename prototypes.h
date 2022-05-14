@@ -69,7 +69,7 @@ void BJPI();
 
 void CJPI();
 
-void RP(int n, int t);
+void RP(void (*function)(), int t);
 
 //--------------------------------
 // Other functions, will move to functions.h/functions.c file later
@@ -97,4 +97,6 @@ void printMaze();
 void printDeed();
 
 void printPheromone();
+
+void finished();
 //--------------------------------

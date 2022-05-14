@@ -41,7 +41,8 @@ int main()
 
 	// scan maze into array
 	scan();
-	printMaze();
+	printf("\n");
+	// printMaze();
 
 	// get starting position and maze dimensions from input file
 	findStart();
@@ -49,24 +50,8 @@ int main()
 	// main logic function
 	logic();
 
-	for (i = 0; i < x_dim * y_dim; i++)
-	{
-		if (i % (x_dim) == 0)
-		{
-			printf("\n");
-		}
-		if (pheromoneArray[i] == 1)
-		{
-			printf("|X|%i| ", deedArray[i]);
-		}
-		else
-		{
-			printf("|%c|%i| ", mazeArray[i], deedArray[i]);
-		}
-	}
-
 	// print maze array
-	// printMaze();
+	printMaze();
 
 	// print deed array
 	// printDeed();
@@ -74,8 +59,8 @@ int main()
 	// print pheremone array
 	// printPheromone();
 
-	printf("\nPoint Total = %i\n", deedTotal);
+	// printf("\nPoint Total = %i\n", deedTotal);
 
-	printf("x = %i, y = %i", x_dim, y_dim);
+	printf("x = %i, y = %i\n", x_dim, y_dim);
 	return 0;
 }
