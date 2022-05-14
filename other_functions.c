@@ -4,10 +4,6 @@
 #include <ctype.h>
 #include <time.h>
 #include <stdbool.h>
-//#include "prototypes.h"
-
-#define MAX_SIZE 30
-#define MAX_NUMBER_OF_STEPS 30
 
 void findDims()
 {
@@ -65,7 +61,7 @@ void createArrays()
 
 void scan()
 {
-	// reopen file
+	// Open file
 	input = fopen("maze.txt", "r");
 
 	// Scans the input file into the necessary arrays
@@ -102,7 +98,6 @@ void scan()
 			}
 		}
 	}
-	// printMaze();
 }
 
 void findStart()
@@ -180,6 +175,7 @@ void checkSurroundings()
 		}
 		else
 		{
+			MARK();
 			finished();
 		}
 	}
@@ -804,10 +800,11 @@ void printPheromone()
 
 void finished()
 {
-	fprintf(output, "\nEither the max number of steps has been used or there are no more possible moves\n");
+	fprintf(output, "\nEither the max number of steps has been reached or there are no more possible moves\n");
 	fprintf(output, "Point total is %i", deedTotal);
-	printf("x = %i, y = %i\n", x_dim, y_dim);
 
 	printMaze();
+	printf("\n\n");
+	printf("Point total is %i\n(Find the logic used in this maze in the output.txt file)", deedTotal);
 	exit(3);
 }

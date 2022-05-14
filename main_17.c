@@ -2,12 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <time.h>
 #include <stdbool.h>
-//#include "prototypes.h"
-
-#define MAX_SIZE 30
-#define MAX_NUMBER_OF_STEPS 30
 
 void MARK()
 {
@@ -101,6 +96,12 @@ int CWB() // check down
 
 void PUSH()
 {
+	// If stack is full, clear it and continue adding the value
+	if (stackPosition == MAX_SIZE)
+	{
+		CLEAR();
+	}
+	// Add a value to the top of the stack
 	int i;
 	stack[stackPosition] = currentPos;
 	stackPosition++;
@@ -116,6 +117,7 @@ void PUSH()
 
 void POP()
 {
+	// Remove the element at the top of the stack
 	int i;
 	stackPosition--;
 	fprintf(output, "\tPOP Popped top of stack\n");
@@ -130,6 +132,7 @@ void POP()
 
 coord PEEK()
 {
+	// Return the value at the top of the stack
 	int i;
 	fprintf(output, "\tPEEK Peeked (%i, %i) from top of stack\n", stack[stackPosition - 1].x, stack[stackPosition - 1].y);
 	return stack[stackPosition - 1];
@@ -137,9 +140,8 @@ coord PEEK()
 
 void CLEAR()
 {
-	// Remove all but one stored location
-	// Need to keep at least one because otherwise execution will just end since there are no possible moves
-	stackPosition = 1;
+	// Remove all elements currently stored in the stack
+	stackPosition = 0;
 	int i;
 	fprintf(output, "CLEAR\t\tCleared stack\n");
 	fprintf(output, "Stack is now: ");
@@ -156,6 +158,7 @@ void BACKTRACK()
 	// Only gets called if there are no more immediate possible moves, so if there is nothing stored in the stack then there are no moves left at all
 	if (stackPosition == 0)
 	{
+		MARK();
 		finished();
 	}
 	steps++;
