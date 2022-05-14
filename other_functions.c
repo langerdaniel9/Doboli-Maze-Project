@@ -5,6 +5,11 @@
 #include <time.h>
 #include <stdbool.h>
 
+/// Other Functions File ///
+
+// Project Members: Daniel Langer, Alan George, and Kenneth Procacci // 
+
+
 void findDims()
 {
 	// scan a single row to find x_dim

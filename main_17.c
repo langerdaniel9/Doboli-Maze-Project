@@ -4,6 +4,11 @@
 #include <ctype.h>
 #include <stdbool.h>
 
+/// 17 - Functions File ///
+
+// Project Members: Daniel Langer, Alan George, and Kenneth Procacci // 
+
+
 void MARK()
 {
 	pheromoneArray[currentPos.x + currentPos.y * x_dim] = 1;
@@ -181,10 +186,8 @@ void BJPI()
 
 		while (mazeArray[(currentPos.x + (currentPos.y * x_dim)) - i] == ' ' && pheromoneArray[(currentPos.x + (currentPos.y * x_dim)) - i] == 0)
 		{
-			// also in a jump, do we MARK all of the spaces the ant jumps over?
 			i++;
 		}
-		// in a jump, would that only take one step in the stack memory?
 		currentPos.y -= i;
 		checkIfOnDeed();
 		steps++;

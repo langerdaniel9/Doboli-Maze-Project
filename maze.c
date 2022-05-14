@@ -4,6 +4,10 @@
 #include "main_17.c"
 #include "other_functions.c"
 
+/// Main File ///
+
+// Project Members: Daniel Langer, Alan George, and Kenneth Procacci // 
+
 int main()
 {
 	// open input file

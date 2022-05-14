@@ -3,6 +3,11 @@
 
 #define MAX_SIZE 30
 #define MAX_NUMBER_OF_STEPS 30
+
+/// Header File ///
+
+// Project Members: Daniel Langer, Alan George, and Kenneth Procacci // 
+
 //--------------------------------
 typedef struct coord
 {
@@ -35,8 +40,9 @@ int stack2Position = 0;
 
 FILE *output;
 FILE *input;
+//--------------------------------
 
-// 17 main functions, will move to main17.h/main17.c file later
+// 17 main functions //
 void MARK();
 
 void MOVE_F();
@@ -70,10 +76,9 @@ void BJPI();
 void CJPI();
 
 void RP(void (*function)(), int t);
-
 //--------------------------------
-// Other functions, will move to functions.h/functions.c file later
 
+// Other functions //
 void findDims();
 
 void createArrays();
