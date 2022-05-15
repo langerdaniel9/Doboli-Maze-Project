@@ -6,7 +6,7 @@
 
 /// Main File ///
 
-// Project Members: Daniel Langer, Alan George, and Kenneth Procacci // 
+// Project Members: Daniel Langer, Alan George, and Kenneth Procacci //
 
 int main()
 {
@@ -17,14 +17,19 @@ int main()
 		exit(1);
 	}
 
-	// create output file
-	if ((output = fopen("output.txt", "w")) == NULL)
+	// open intelligence file
+	if ((intelligence = fopen("intelligence.txt", "r+")) == NULL)
 	{
-		printf("error in opening maze.txt");
+		printf("error in opening intelligence.txt");
 		exit(1);
 	}
 
-	int i, j;
+	// create output file
+	if ((output = fopen("output.txt", "w")) == NULL)
+	{
+		printf("error in creating output.txt");
+		exit(1);
+	}
 
 	// get x_dim and y_dim
 	findDims();

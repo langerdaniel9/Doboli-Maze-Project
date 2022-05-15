@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 #define MAX_SIZE 30
 #define MAX_NUMBER_OF_STEPS 30
 
 /// Header File ///
 
-// Project Members: Daniel Langer, Alan George, and Kenneth Procacci // 
+// Project Members: Daniel Langer, Alan George, and Kenneth Procacci //
 
 //--------------------------------
 typedef struct coord
@@ -32,6 +33,9 @@ int steps = 0;
 int deedTotal = 0;
 int srandCall = 0;
 
+int left = 0, right = 0, up = 0, down = 0;
+bool moved = false;
+
 coord stack[MAX_SIZE];
 int stackPosition = 0;
 
@@ -40,6 +44,7 @@ int stack2Position = 0;
 
 FILE *output;
 FILE *input;
+FILE *intelligence;
 //--------------------------------
 
 // 17 main functions //
@@ -75,7 +80,7 @@ void BJPI();
 
 void CJPI();
 
-void RP(void (*function)(), int t);
+void RP(char RParray[20][20], int t);
 //--------------------------------
 
 // Other functions //

@@ -7,14 +7,12 @@
 
 /// Other Functions File ///
 
-// Project Members: Daniel Langer, Alan George, and Kenneth Procacci // 
-
+// Project Members: Daniel Langer, Alan George, and Kenneth Procacci //
 
 void findDims()
 {
 	// scan a single row to find x_dim
 	char rowForRowDim[100];
-	input = fopen("maze.txt", "r");
 
 	fgets(rowForRowDim, 100, input);
 	int i;
@@ -194,106 +192,24 @@ void checkSurroundings()
 		{
 		case 1:
 		{
-			if (left)
-			{
-				moved = true;
-				MOVE_L();
-			}
-			else if (up)
-			{
-				moved = true;
-				MOVE_F();
-			}
-			else if (down)
-			{
-				moved = true;
-				MOVE_B();
-			}
-			else if (right)
-			{
-				moved = true;
-				MOVE_R();
-			}
-
+			fprintf(intelligence, "RP (\nCWL\nCWR\nCWB\nCWF\nMARK\nMOVE_L\nMOVE_F\nMOVE_B\nMOVE_R\n) 10\nBACKTRACK");
 			break;
 		}
 		case 2:
 		{
-			if (left)
-			{
-				moved = true;
-				MOVE_L();
-			}
-			else if (down)
-			{
-				moved = true;
-				MOVE_B();
-			}
-			else if (up)
-			{
-				moved = true;
-				MOVE_F();
-			}
-			else if (right)
-			{
-				moved = true;
-				MOVE_R();
-			}
+			fprintf(intelligence, "RP (\nCWL\nCWR\nCWB\nCWF\nMARK\nMOVE_L\nMOVE_B\nMOVE_F\nMOVE_R\n) 10\nBACKTRACK");
 			break;
 		}
 		case 3:
 		{
-			if (up)
-			{
-				moved = true;
-				MOVE_F();
-			}
-			else if (left)
-			{
-				moved = true;
-				MOVE_L();
-			}
-			else if (down)
-			{
-				moved = true;
-				MOVE_B();
-			}
-			else if (right)
-			{
-				moved = true;
-				MOVE_R();
-			}
+			fprintf(intelligence, "RP (\nCWL\nCWR\nCWB\nCWF\nMARK\nMOVE_F\nMOVE_L\nMOVE_B\nMOVE_R\n) 10\nBACKTRACK");
 			break;
 		}
 		case 4:
 		{
-			if (down)
-			{
-				moved = true;
-				MOVE_B();
-			}
-			else if (left)
-			{
-				moved = true;
-				MOVE_L();
-			}
-			else if (up)
-			{
-				moved = true;
-				MOVE_F();
-			}
-			else if (right)
-			{
-				moved = true;
-				MOVE_R();
-			}
+			fprintf(intelligence, "RP (\nCWL\nCWR\nCWB\nCWF\nMARK\nMOVE_B\nMOVE_L\nMOVE_F\nMOVE_R\n) 10\nBACKTRACK");
 			break;
 		}
-		}
-
-		if (!moved)
-		{
-			BACKTRACK();
 		}
 	}
 	break;
@@ -306,106 +222,24 @@ void checkSurroundings()
 		{
 		case 1:
 		{
-			if (up)
-			{
-				moved = true;
-				MOVE_F();
-			}
-			else if (left)
-			{
-				moved = true;
-				MOVE_L();
-			}
-			else if (right)
-			{
-				moved = true;
-				MOVE_R();
-			}
-			else if (down)
-			{
-				moved = true;
-				MOVE_B();
-			}
-
+			fprintf(intelligence, "RP (\nCWL\nCWR\nCWB\nCWF\nMARK\nMOVE_F\nMOVE_L\nMOVE_R\nMOVE_B\n) 10\nBACKTRACK");
 			break;
 		}
 		case 2:
 		{
-			if (up)
-			{
-				moved = true;
-				MOVE_F();
-			}
-			else if (right)
-			{
-				moved = true;
-				MOVE_R();
-			}
-			else if (left)
-			{
-				moved = true;
-				MOVE_L();
-			}
-			else if (down)
-			{
-				moved = true;
-				MOVE_B();
-			}
+			fprintf(intelligence, "RP (\nCWL\nCWR\nCWB\nCWF\nMARK\nMOVE_F\nMOVE_R\nMOVE_L\nMOVE_B\n) 10\nBACKTRACK");
 			break;
 		}
 		case 3:
 		{
-			if (left)
-			{
-				moved = true;
-				MOVE_L();
-			}
-			else if (up)
-			{
-				moved = true;
-				MOVE_F();
-			}
-			else if (right)
-			{
-				moved = true;
-				MOVE_R();
-			}
-			else if (down)
-			{
-				moved = true;
-				MOVE_B();
-			}
+			fprintf(intelligence, "RP (\nCWL\nCWR\nCWB\nCWF\nMARK\nMOVE_L\nMOVE_F\nMOVE_R\nMOVE_B\n) 10\nBACKTRACK");
 			break;
 		}
 		case 4:
 		{
-			if (right)
-			{
-				moved = true;
-				MOVE_R();
-			}
-			else if (up)
-			{
-				moved = true;
-				MOVE_F();
-			}
-			else if (left)
-			{
-				moved = true;
-				MOVE_L();
-			}
-			else if (down)
-			{
-				moved = true;
-				MOVE_B();
-			}
+			fprintf(intelligence, "RP (\nCWL\nCWR\nCWB\nCWF\nMARK\nMOVE_R\nMOVE_F\nMOVE_L\nMOVE_B\n) 10\nBACKTRACK");
 			break;
 		}
-		}
-
-		if (!moved)
-		{
-			BACKTRACK();
 		}
 	}
 	break;
@@ -418,106 +252,24 @@ void checkSurroundings()
 		{
 		case 1:
 		{
-			if (right)
-			{
-				moved = true;
-				MOVE_R();
-			}
-			else if (up)
-			{
-				moved = true;
-				MOVE_F();
-			}
-			else if (down)
-			{
-				moved = true;
-				MOVE_B();
-			}
-			else if (left)
-			{
-				moved = true;
-				MOVE_L();
-			}
-
+			fprintf(intelligence, "RP (\nCWL\nCWR\nCWB\nCWF\nMARK\nMOVE_R\nMOVE_F\nMOVE_B\nMOVE_L\n) 10\nBACKTRACK");
 			break;
 		}
 		case 2:
 		{
-			if (right)
-			{
-				moved = true;
-				MOVE_R();
-			}
-			else if (down)
-			{
-				moved = true;
-				MOVE_B();
-			}
-			else if (up)
-			{
-				moved = true;
-				MOVE_F();
-			}
-			else if (left)
-			{
-				moved = true;
-				MOVE_L();
-			}
+			fprintf(intelligence, "RP (\nCWL\nCWR\nCWB\nCWF\nMARK\nMOVE_R\nMOVE_B\nMOVE_F\nMOVE_L\n) 10\nBACKTRACK");
 			break;
 		}
 		case 3:
 		{
-			if (up)
-			{
-				moved = true;
-				MOVE_F();
-			}
-			else if (right)
-			{
-				moved = true;
-				MOVE_R();
-			}
-			else if (down)
-			{
-				moved = true;
-				MOVE_B();
-			}
-			else if (left)
-			{
-				moved = true;
-				MOVE_L();
-			}
+			fprintf(intelligence, "RP (\nCWL\nCWR\nCWB\nCWF\nMARK\nMOVE_F\nMOVE_R\nMOVE_B\nMOVE_L\n) 10\nBACKTRACK");
 			break;
 		}
 		case 4:
 		{
-			if (down)
-			{
-				moved = true;
-				MOVE_B();
-			}
-			else if (right)
-			{
-				moved = true;
-				MOVE_R();
-			}
-			else if (up)
-			{
-				moved = true;
-				MOVE_F();
-			}
-			else if (left)
-			{
-				moved = true;
-				MOVE_L();
-			}
+			fprintf(intelligence, "RP (\nCWL\nCWR\nCWB\nCWF\nMARK\nMOVE_B\nMOVE_R\nMOVE_F\nMOVE_L\n) 10\nBACKTRACK");
 			break;
 		}
-		}
-
-		if (!moved)
-		{
-			BACKTRACK();
 		}
 	}
 	break;
@@ -530,106 +282,24 @@ void checkSurroundings()
 		{
 		case 1:
 		{
-			if (down)
-			{
-				moved = true;
-				MOVE_B();
-			}
-			else if (right)
-			{
-				moved = true;
-				MOVE_R();
-			}
-			else if (left)
-			{
-				moved = true;
-				MOVE_L();
-			}
-			else if (up)
-			{
-				moved = true;
-				MOVE_F();
-			}
-
+			fprintf(intelligence, "RP (\nCWL\nCWR\nCWB\nCWF\nMARK\nMOVE_B\nMOVE_R\nMOVE_L\nMOVE_F\n) 10\nBACKTRACK");
 			break;
 		}
 		case 2:
 		{
-			if (down)
-			{
-				moved = true;
-				MOVE_B();
-			}
-			else if (left)
-			{
-				moved = true;
-				MOVE_L();
-			}
-			else if (right)
-			{
-				moved = true;
-				MOVE_R();
-			}
-			else if (up)
-			{
-				moved = true;
-				MOVE_F();
-			}
+			fprintf(intelligence, "RP (\nCWL\nCWR\nCWB\nCWF\nMARK\nMOVE_B\nMOVE_L\nMOVE_R\nMOVE_F\n) 10\nBACKTRACK");
 			break;
 		}
 		case 3:
 		{
-			if (right)
-			{
-				moved = true;
-				MOVE_R();
-			}
-			else if (down)
-			{
-				moved = true;
-				MOVE_B();
-			}
-			else if (left)
-			{
-				moved = true;
-				MOVE_L();
-			}
-			else if (up)
-			{
-				moved = true;
-				MOVE_F();
-			}
+			fprintf(intelligence, "RP (\nCWL\nCWR\nCWB\nCWF\nMARK\nMOVE_R\nMOVE_B\nMOVE_L\nMOVE_F\n) 10\nBACKTRACK");
 			break;
 		}
 		case 4:
 		{
-			if (left)
-			{
-				moved = true;
-				MOVE_L();
-			}
-			else if (down)
-			{
-				moved = true;
-				MOVE_B();
-			}
-			else if (right)
-			{
-				moved = true;
-				MOVE_R();
-			}
-			else if (up)
-			{
-				moved = true;
-				MOVE_F();
-			}
+			fprintf(intelligence, "RP (\nCWL\nCWR\nCWB\nCWF\nMARK\nMOVE_L\nMOVE_B\nMOVE_R\nMOVE_F\n) 10\nBACKTRACK");
 			break;
 		}
-		}
-
-		if (!moved)
-		{
-			BACKTRACK();
 		}
 	}
 	break;
@@ -641,7 +311,67 @@ void logic()
 	// While there are steps available, check surroundings and move
 	while (steps < MAX_NUMBER_OF_STEPS)
 	{
-		checkSurroundings();
+		// Close and reopen intelligence file to loop through it
+		fclose(intelligence);
+		intelligence = fopen("intelligence.txt", "r+");
+
+		// Scan through it line by line, doing each command
+		char line[8];
+		while (fscanf(intelligence, "%s", line) != EOF)
+		{
+
+			if (strcmp(line, "RP") == 0)
+			{
+				char RParray[20][20];
+				int r = 0;
+				char *temp;
+				while (true)
+				{
+					fscanf(intelligence, "%s", temp);
+					if (isdigit(temp[0]))
+					{
+						RP(RParray, atoi(temp) - 1);
+						break;
+					}
+					else
+					{
+						strcpy(RParray[r], temp);
+						RParray[r + 1][0] = '\0';
+						r++;
+					}
+				}
+			}
+			else if (strcmp(line, "PUSH") == 0)
+			{
+				PUSH();
+			}
+			else if (strcmp(line, "POP") == 0)
+			{
+				POP();
+			}
+			else if (strcmp(line, "CLEAR") == 0)
+			{
+				CLEAR();
+			}
+			else if (strcmp(line, "PEEK") == 0)
+			{
+				PEEK();
+			}
+			else if (strcmp(line, "CJPI") == 0)
+			{
+				CJPI();
+			}
+			else if (strcmp(line, "BJPI") == 0)
+			{
+				BJPI();
+			}
+			else if (strcmp(line, "BACKTRACK") == 0)
+			{
+				BACKTRACK();
+			}
+		}
+
+		// break;
 	}
 	finished();
 }
@@ -670,51 +400,51 @@ void reviewPriorities()
 	}
 
 	// If multiple are found to be true, then itll pick the one that is first in the order
-	int left = 0, right = 0, up = 0, down = 0;
+	int _left = 0, _right = 0, _up = 0, _down = 0;
 
 	for (i = 0; i < stack2Position - 1; i++)
 	{
 		// See if x continuously increases, if so then prioritize moving left
 		if (stack2[i].location.x >= stack2[i + 1].location.x)
 		{
-			left++;
+			_left++;
 		}
 		// See if x continuously decreases, if so then prioritize moving right
 		else if (stack2[i].location.x <= stack2[i + 1].location.x)
 		{
-			right++;
+			_right++;
 		}
 		// See if y continuously increases, if so then prioritize moving up
 		else if (stack2[i].location.y <= stack2[i + 1].location.y)
 		{
-			up++;
+			_up++;
 		}
 		// See if y continuously decreases, if so then prioritize moving down
 		else if (stack2[i].location.y >= stack2[i + 1].location.y)
 		{
-			down++;
+			_down++;
 		}
 	}
 
-	if (left == m)
+	if (_left == m)
 	{
 		fprintf(output, "Changed priority from %i to 1\n", priority);
 		priority = 1;
 		return;
 	}
-	else if (right == m)
+	else if (_right == m)
 	{
 		fprintf(output, "Changed priority from %i to 3\n", priority);
 		priority = 3;
 		return;
 	}
-	else if (up == m)
+	else if (_up == m)
 	{
 		fprintf(output, "Changed priority from %i to 2\n", priority);
 		priority = 2;
 		return;
 	}
-	else if (down == m)
+	else if (_down == m)
 	{
 		fprintf(output, "Changed priority from %i to 4\n", priority);
 		priority = 4;
@@ -738,7 +468,7 @@ void checkIfOnDeed()
 		// If you have collected at least two deeds, there is potential to find a pattern, so try to find a pattern for them
 		if (stack2Position > 1)
 		{
-			reviewPriorities();
+			// reviewPriorities();
 		}
 	}
 }
